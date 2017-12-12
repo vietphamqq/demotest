@@ -1,9 +1,12 @@
-import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
-import io.github.bonigarcia.wdm.OperaDriverManager;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
+import org.sikuli.script.FindFailed;
+import org.sikuli.script.Pattern;
+import org.sikuli.script.Screen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ public class DemoTest {
     static WebDriver driver;
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, FindFailed {
         InternetExplorerDriverManager.getInstance().arch32().setup();
 
         InternetExplorerOptions options = new InternetExplorerOptions();
@@ -47,10 +50,18 @@ public class DemoTest {
         List<String> windows = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(windows.get(1));
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
         WebElement searchButton = driver.findElement(By.xpath(".//a[./img[@title='Advanced Search']]"));
         searchButton.click();
 
+        Screen screen = new Screen();
+
+
+        Pattern txtLastName = new Pattern("src/img/txtLastName.PNG");
+        Pattern btnSearch = new Pattern("src/img/btnSearch.PNG");
+        screen.wait(txtLastName, 20).click();
+        screen.type("walter");
+        screen.wait(btnSearch, 20).click();
 
         Thread.sleep(4000);
         driver.quit();
